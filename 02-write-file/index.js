@@ -1,6 +1,9 @@
 const fs = require('fs');
+const path = require("path");
 
-let writeStream = fs.createWriteStream('text.txt');
+const filePath = path.join(__dirname, "text.txt");
+
+let writeStream = fs.createWriteStream(filePath);
 const {stdin, stdout} = process;
 const exitNotification = () => {
   stdout.write('До свидания!');
