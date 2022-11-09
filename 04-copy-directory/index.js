@@ -3,7 +3,7 @@ const fsPromises = fs.promises;
 let path = require('path');
 
 (function copyDir() {
-  return fsPromises.mkdir('files-copy', {recursive: true})
+  return fsPromises.mkdir((path.join(__dirname, 'files-copy')), {recursive: true})
     .then(() => {
         fsPromises.readdir(path.join(__dirname, 'files'), {withFileTypes: true})
           .then((result) => {
