@@ -13,15 +13,15 @@ function remove() {
 remove();
 
 function copyAssets() {
-  return fsPromises.mkdir('project-dist/assets', {recursive: true})
+  return fsPromises.mkdir(path.join(__dirname, 'project-dist/assets'), {recursive: true})
     .then(() => {
         fsPromises.readdir(path.join(__dirname, 'assets'), {withFileTypes: true})
           .then((result) => {
               result.forEach(
                 (folder) => {
-                  fsPromises.mkdir('project-dist/assets/' + folder.name, {recursive: true})
+                  fsPromises.mkdir(path.join(__dirname, 'project-dist/assets/' + folder.name), {recursive: true})
                     .then(() => {
-                      fsPromises.readdir(path.join('assets/' + folder.name), {withFileTypes: true})
+                      fsPromises.readdir(path.join(__dirname, 'assets/' + folder.name), {withFileTypes: true})
                         .then((files) => {
                             files.forEach(
                               (file) => {
@@ -68,16 +68,16 @@ function copyHtml() {
   fsPromises.copyFile(filePath, fileIndex)
     .then(() => {
       fs.readFile(fileIndex, 'utf-8', (err, code) => {
+        let htmlContent = code;
         const reg = /(?<=\{\{).*?(?=\}\})/g;
         const components = code.match(reg);
-        let updatedValue = code;
         components.forEach((component) => {
           fs.readFile(path.join(__dirname, 'components/' + component + '.html'), 'utf-8', (err, code) => {
             if (!code) {
               return
             }
-            updatedValue = updatedValue.replace('{{' + component + '}}', code)
-            fs.writeFile(fileIndex, updatedValue, (err) => {
+            htmlContent = htmlContent.replace('{{' + component + '}}', code)
+            fs.writeFile(fileIndex, htmlContent, (err) => {
               if (err) throw err
             })
           })
