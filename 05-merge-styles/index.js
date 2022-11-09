@@ -6,12 +6,14 @@ const fileStyles = path.join(__dirname, 'styles')
 
 
 fs.readdir(fileStyles, 'utf-8', (err, content) => {
+  let stylesContent = '';
   content.forEach(file => {
-    if(path.extname(file) === '.css'){
+    if (path.extname(file) === '.css') {
       fs.readFile(`${fileStyles}/${file}`, 'utf-8', (err, code) => {
-        if(err) throw err
-        fs.appendFile(filePath, code, (err) => {
-          if(err) throw err
+        stylesContent += code;
+        if (err) throw err
+        fs.writeFile(filePath, stylesContent, (err) => {
+          if (err) throw err
         })
       })
     }
